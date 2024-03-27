@@ -1,0 +1,82 @@
+
+
+
+# Created this python file to read/ write into SQLite using python commands
+# --------------------------------------
+
+
+
+# Import the module that provides an API to the SQLite Library
+import sqlite3
+
+# To use the module start by creating a database connection object to database
+connectSql = sqlite3.connect("dataBase.db")
+
+# The above command creates or opens the database dataBase.db
+
+
+# create a Cursor object and call its execute method to begin queries in SQL
+
+# our queries could be any of the CRUD operations ----Create, Read, Update and Delete
+# create a table for an entity (users)
+connectSql.execute(""" 
+
+CREATE TABLE IF NOT EXISTS users(
+                   id INTEGER PRIMARY KEY,
+                   name TEXT NOT NULL,
+                   age INTEGER
+)
+
+ """)
+
+connectSql.execute("""
+CREATE TABLE IF NOT EXISTS editors(
+                   id INTEGER,
+                   firstName TEXT
+                   lastName INTEGER
+)
+""")
+
+# inserting
+connectSql.execute(""" INSERT INTO users( name, age) VALUES( 'Williams', 23) """)
+# if id is not given, it will default to 1 as the id for the first user
+
+connectSql.execute(""" INSERT INTO users(  name, age) VALUES( 'Wisdom', 23)""")
+connectSql.execute(""" INSERT INTO users(  name, age) VALUES( 'Wisdom', 23)""")
+connectSql.execute(""" INSERT INTO users(  name, age) VALUES('Theo', 23)""")
+connectSql.execute(""" INSERT INTO users(  name, age) VALUES( 'James', 56)""")
+connectSql.execute(""" INSERT INTO users(  name, age) VALUES( 'Isaac', 87)""")
+
+
+
+
+allUsers = connectSql.execute(""" SELECT * FROM users""")
+print(allUsers)     
+
+# reading value from the database
+print(allUsers.fetchall())
+
+# reading value from a particular user--theo
+theo = connectSql.execute(""" SELECT name FROM users WHERE name = 'Theo' """)
+wisdom = connectSql.execute(""" SELECT age, id, name from users WHERE name = "Wisdom" """)
+print(theo.fetchone())
+print(wisdom.fetchall())
+print(wisdom.lastrowid)
+
+# reading names of all users
+names = connectSql.execute(""" SELECT name FROM users WHERE NAME NOT NULL""")
+print(names.fetchall())
+
+# Update
+# updatedWilliams = connectSql.execute("""UPDATE users SET id=32 WHERE name='Williams' """)
+connectSql.execute(""" UPDATE users SET age=50 WHERE name='Wisdom' """)
+
+
+b= connectSql.execute("""SELECT * FROM users """)
+
+
+print(b.fetchall())
+print(type(b))
+print(type(connectSql))
+
+connectSql.close()
